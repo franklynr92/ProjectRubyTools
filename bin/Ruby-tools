@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+require "bundler/setup" #this sets up the program
+require 'environment' # this is making ProjectRubyTools required
+
+ProjectRubyTools::CLI.new.call
+
+puts "hello world"
