@@ -72,8 +72,9 @@ class ProjectRubyTools::CLI
     def display
         puts "#{self.username}"
         puts "These are the categories: "
-    ProjectRubyTools::GemCategory.all {|element| puts "#{element.category} :,#{element.category_description}, #{element.most_popular_projects}"}
-    menu
+        ProjectRubyTools::GemCategory.all.each.with_index(1) {|element, i| puts "#{i}. Category #{element.category} : #{element.category_description}, 
+        it's most popular projects #{element.most_popular_projects}"}
+        menu
     end
 
     def options
@@ -126,7 +127,7 @@ class ProjectRubyTools::CLI
             puts ProjectRubyTools::GemCategory.all[input.to_i-1].category + ": " 
             puts ProjectRubyTools::GemCategory.all[input.to_i-1].category_description
             puts ProjectRubyTools::GemCategory.all[input.to_i-1].most_popular_projects
-            puts ProjectRubyTools::GemCategory.all[input.to_i-1].other_projects_link
+            #puts ProjectRubyTools::GemCategory.all[input.to_i-1].other_projects_link
             # puts "do you want to see more"
         #  elsif input == "yes"
             self.menu
@@ -171,9 +172,10 @@ class ProjectRubyTools::CLI
 
     def goodbye
         puts "Goodbye, see you later aligator!!"
-        puts "Hello world!" 
+        puts "at last matey"
+        puts "She cannot take any more of this, Captain!" 
         sleep(2)
-        abort("She cannot take any more of this, Captain!")
+        abort("Hello world!")
     end
   
 

@@ -7,7 +7,6 @@ attr_accessor :category, :category_description, :most_popular_projects, :other_p
 
     def initialize(category, category_description, most_popular_projects, other_projects_link) # projects)
       @category = category
-      # binding.pry
       @category_description = category_description
       @most_popular_projects = most_popular_projects
       @other_projects_link = other_projects_link
@@ -20,9 +19,9 @@ attr_accessor :category, :category_description, :most_popular_projects, :other_p
       @@all
     end
 
-   def self.find_or_create_by_name(category)
-    self.all.find{|project| project == project}
-    end
+   #def self.find_or_create_by_name(category)
+   # self.all.find{|project| project == project}
+   # end
 
     
 end
