@@ -1,6 +1,6 @@
 require "tty-prompt"
 class ProjectRubyTools::CLI
-    attr_accessor :username
+    attr_accessor :username #, :gemprojects
 
     def call
         greet
@@ -31,25 +31,30 @@ class ProjectRubyTools::CLI
         puts "What is your name friend?"
         name = gets.chomp
         self.username = name
-        if name == "exit"
+       if name == "exit"
             quickExit
-        elsif name == ""
+        elsif name == "" 
             self.username = "Captain"
         puts "Welcome, #{self.username}"
         sleep(2)
+        scrape1
+        else
+        puts "Welcome, #{self.username}"
+       sleep(2)
         scrape1
     end
 end
 
 
     def scrape1
-        puts "#{self.username}, if you could please wait a moment"
+        puts "#{self.username}, if you could please wait a moment"  
         sleep(0.5)
         puts "We'll be right with you shortly"
         sleep(0.3)
         puts "Thank you!"
         sleep(1)
         ProjectRubyTools::Scraper.scrape_ruby
+        #ProjectRubyTools::Scraper.scrape_gem
         puts "Get ready to... Yo-ho-ho!"
         sleep(1)
         system("clear")
@@ -57,44 +62,17 @@ end
         display
     end
 
-=begin       
-        puts
-        list_category
-        puts
-        puts "These are the coinsiding description:"
-        puts
-        category_description
-        puts
-        puts "These are the most popular projects!:"
-        puts
-        most_popular_projects
-        puts
-        puts "These are the link to all of the categories projects!:"
-        puts
-        other_projects_link
-        # binding.pry
-        puts
-        puts "These are the projects under each category"
-        #projects_link
-        #ProjectRubyTools::Scraper.scrape_gems(categorygem)
-        menu
-        puts "THIS!! WAS FUN!!"
-        goodbye
-    end
-=end
-
     def display
         puts "#{self.username}"
         puts "These are the categories: "
         ProjectRubyTools::GemCategory.all.each.with_index(1) {|element, i| puts "For #{i}. the category is... #{element.category} 
         a brief description of  what #{element.category} does is the following:
         #{element.category_description}, 
-
-        it's two most popular projects are: 
+         two most popular projects are: 
         #{element.most_popular_projects}"}
         menu
     end
-
+=begin
     def options
         puts "put the number type"
         input = gets.strip
@@ -104,44 +82,78 @@ end
         else 
             goodbye
         end
-
     end
-=begin
-    def display_second_scrape()
+
+
+    def projects_scrape
+    ProjectRubyTools::Scraper.scrape_gems
+    projects
     end
 =end
+
     def list_category
-        
         puts "These are the categories:"
         # binding.pry
-        ProjectRubyTools::GemCategory.all.each.with_index(1) { |element,i| puts "#{i}. #{element.category}"}# - #{category.price} - #{category.availability}"}
-      #   @categories.each.with_index(1) do |category, i|
-      #          puts "#{i}. #{category.name}"
-      # end
+        ProjectRubyTools::GemCategory.all.each.with_index(1) { |element,i| puts "#{i}. #{element.category}"}
+        #ProjectRubyTools::GemProjects.all.each.with_index(1) { |element,i| puts "#{i}. #{element.category}"}
+        menu
+    end
+
+    def category_gems
+        ProjectRubyTools::GemCategory.all.each.with_index(1) { |element,i| puts "#{i}. #{element.category}"}
     end
 
     def category_description
         puts "These are all the categories with the coninsiding descriptions"
         sleep(1)
-        ProjectRubyTools::GemCategory.all.each.with_index(1) {|element, i| puts "#{i}. #{element.category} : 
-         #{element.category}"}
+        ProjectRubyTools::GemCategory.all.each.with_index(1) {|element, i| puts "#{i}. #{element.category}: 
+        Description:
+        #{element.category_description}"}
          menu
     end
 
     def most_popular_projects
-        ProjectRubyTools::GemCategory.all.each { |element| puts "#{element.most_popular_projects}"}
+        puts "These are the all the categories with their two most popular projects:"
+        sleep(1.5)
+        ProjectRubyTools::GemCategory.all.each.with_index(1) {|element, i| puts "#{i}. #{element.category}:
+        The most popular projects are as follows:
+        #{element.most_popular_projects}"}
+        menu
     end
 
-    def other_projects_link
+    def other_projects_link 
+        puts "These are the all the categories with their links:"
+        sleep(1.5)
+        ProjectRubyTools::GemCategory.all.each.with_index(1) {|element, i| puts "#{i}. #{element.category}:
+        
+        #{element.other_projects_link }"}
+        menu
+    end
+
+    def project
+        ProjectRubyTools::GemCategory.all.each.with_index(1) {|element, i| puts "#{i}. #{element.project_name}"}
+        menu
+    end
+#        @gemcategory.each do |gemcategory|
+ #           ProjectRubyTools::Scraper
+
+=begin    def projects
         ProjectRubyTools::GemCategory.all.each { |element| puts "#{element.other_projects_link}"}
     end
-
+=end
     #build CLI better whehter they want to know projects or details
 
  
 
     def menu # gemcategories allow user to select gem category
-        puts "Enter the number of the category you'd like more info on, type list to see the categories again, type help for help or type exit to finish:"
+        puts "Enter a number of the category you'd like more info on from 1-16."
+        puts "The other commands are as follows: "
+                puts "list = only the categories"
+                puts "category description or cat d = categories with a description"
+                puts "most popular projects or mop proj = categories with their most popular projects"
+                puts "other projects link = other projects link"
+                puts "exit"
+        puts "type help for help or type exit to finish:"
         input = gets.chomp
          if input == "exit"
             goodbye
@@ -149,9 +161,7 @@ end
             puts ProjectRubyTools::GemCategory.all[input.to_i-1].category + ": " 
             puts ProjectRubyTools::GemCategory.all[input.to_i-1].category_description
             puts ProjectRubyTools::GemCategory.all[input.to_i-1].most_popular_projects
-            #puts ProjectRubyTools::GemCategory.all[input.to_i-1].other_projects_link
-            # puts "do you want to see more"
-        #  elsif input == "yes"
+            puts ProjectRubyTools::GemCategory.all[input.to_i-1].other_projects_link
             self.menu
             #scrape2s
             #find instance of that category
@@ -159,7 +169,6 @@ end
             #details method prints details for gem category
             # method for each input
             # puts ProjectRubyTools::GemCategory.all[input.to_i-1].projects
-            #   binding.pry
             # puts "#{the_category.name}"  #{the_category.price} - "#{the_category.availability}"
             elsif input == "list"
                 list_category
@@ -167,27 +176,32 @@ end
             elsif input == "category description" || input == "cat description"
                category_description
                 self.menu
-            elsif input == "most popular projects"
+            elsif input == "most popular projects" || input == "mop proj"
                 # binding.pry
                 most_popular_projects
                 self.menu
             elsif input == "other projects link"
                 other_projects_link 
                 self.menu
-                #use each with index for second scrape?
-                #scrape2 once category is chosen to dive in 1st category
-                #find by and pass on to second scraper    
-            #elsif input == "projects"
-             #   projects_link_name
-              #  self.menu
+            elsif input == "projects"
+                project
+              self.menu
             elsif input == "help"
-                puts "The proper commands are as follows: "
-                puts "categories = all categories"
-                puts "most popular projects = most popular projects"
-                puts "other projects link = other projects link"
+                puts "You need some help?"
+                sleep(1)
+                system("clear")
+                sleep(1)
+                puts "The commands are as follows: "
+                puts "Enter a number of the category you'd like more info on from 1-16."
+                        puts "list = only the categories"
+                        puts "category description or cat d = categories with a description"
+                        puts "most popular projects or mop proj = categories with their most popular projects"
+                        puts "other projects link = other projects link"
+                        puts "exit"
+                puts "type help for help or type exit to finish:"
                 self.menu
             else
-                puts "HEY!!! THAT'S NOT A COMMAND!!...PLEASE input a # from 1-16, help for help, or exit to finish. THANK YOU!"
+                puts "HEY!!! THAT'S NOT A COMMAND!!...PLEASE input a # from 1-16, help for full command list, or exit to finish. THANK YOU!"
                 self.menu
     end
     end
@@ -233,9 +247,7 @@ end
         g = "until we meet again"
     end
 =end
-    def second_note
-        puts "farewell"
-    end
+    
 
     def goodbye
         system("clear")
