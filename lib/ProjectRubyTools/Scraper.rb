@@ -2,7 +2,7 @@ require 'nokogiri'
 require 'pry'
 class ProjectRubyTools::Scraper
   #this class scrapes
-  def self.scrape_ruby
+  def self.scrape_rubytools
     doc = Nokogiri::HTML(open("https://www.ruby-toolbox.com"))
     # based_site = "https://www.ruby-toolbox.com" orginal
     #html_to_elements = open(based_site)
@@ -23,12 +23,6 @@ class ProjectRubyTools::Scraper
     self.scrape_gem(open_source)
     end 
   end
-=begin
-  def other_projects_links
-
-    ProjectRubyTools::GemCategory.all.each.with_index(1) {|element, i| puts "#{element.other_projects_link}"}
-end
-=end
 
  def self.scrape_gem(open_source)
   doc = open(open_source.other_projects_link) 
@@ -39,8 +33,8 @@ end
     project_elements = html_to_elements.css('div.project.box')
     #binding.pry
       project_elements.map do |gem|
-     open_source.project_name = gem.css('h3.is-size-4 a').text.capitalize
-    
+     open_source.project_name = gem.css('h3.is-size-4').css('a').text.capitalize
+     open_source.project_description = gem.css('.description').first.text
     #   project_tagline = gem.css('strong.tag').first.text
     #   project_description = gem.css('.description').text
     #   project_downloads = gem.css('strong a').first.text
