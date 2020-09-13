@@ -178,7 +178,7 @@ end
         end
     end
 
-    def menu # gemcategories allow user to select gem category
+    def menu 
         puts "Either enter a number of the category you'd like more info on from 1-16, or use one of these commnands:"
                         puts " ' list ' = all categories and display other commands, 'category description' or 'cat d' = all categories with a description"
                         puts " ' most popular projects ' or ' mop proj ' = Categories with their most popular projects"
@@ -194,7 +194,6 @@ end
             puts ProjectRubyTools::GemCategory.all[input.to_i-1].category_description
             puts ProjectRubyTools::GemCategory.all[input.to_i-1].most_popular_projects
             puts ProjectRubyTools::GemCategory.all[input.to_i-1].other_projects_link
-            #puts ProjectRubyTools::GemCategory.all[input.to_i-1].project_name
             self.menu
             elsif input == "list"
                 system("clear")
@@ -302,3 +301,6 @@ end
   
 
 end
+
+# gemcategories allow user to select gem category
+#puts ProjectRubyTools::GemCategory.all[input.to_i-1].project_name
